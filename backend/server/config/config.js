@@ -1,9 +1,7 @@
-const config = {
+export default {
   db: {
     uri:
-      'mongodb+srv://dbAdmin:dbAdminPass@cluster0.c5owr.mongodb.net/locationTranslator?retryWrites=true&w=majority',
+      'mongodb+srv://admin:adminpwd@cluster0.c5owr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   },
   port: 5000,
 };
-
-module.exports = config;

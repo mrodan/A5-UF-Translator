@@ -1,7 +1,8 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const config = require('./config/config');
+import express from 'express';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+import config from './config/config.js';
+import requestRouter from './routes/requestRouter.js';
 
 // Database connection
 mongoose.connect(
@@ -21,7 +22,7 @@ const app = express(); // Init express app
 app.use(morgan('dev')); // Request log
 app.use(express.json()); // Use body-parser module
 
-//app.use('/where', whatRouter);
+app.use('/request', requestRouter);
 
 // Listen to port
 app.listen(config.port, () => {
