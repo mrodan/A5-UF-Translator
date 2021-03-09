@@ -13,11 +13,6 @@ mongoose.connect(
   }
 );
 
-// Event triggers when connection is disconnected
-mongoose.connection.on('disconnected', () => {
-  console.log('Connection to DB is closed');
-});
-
 const app = express(); // Init express app
 app.use(morgan('dev')); // Request log
 app.use(express.json()); // Use body-parser module

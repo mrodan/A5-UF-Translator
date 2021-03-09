@@ -7,15 +7,15 @@ const Header = () => {
   return (
     <header>
       <>
-        <Navbar bg="primary" variant="dark" expand="lg" CollapseOnSelect>
+        <Navbar bg="primary" variant="dark" expand="lg">
           <Container>
-            <Navbar.Brand href="/">UF Location Trasnslator</Navbar.Brand>
+            <Navbar.Brand href="/">GatorCom Translator</Navbar.Brand>
             <Nav className="ml-auto">
               <Nav.Link href="/">
                 <LocationOnIcon />
                 All Questions
               </Nav.Link>
-              <Nav.Link href="/new">
+              <Nav.Link href="/newrequest">
                 <AddLocationIcon />
                 New Location
               </Nav.Link>

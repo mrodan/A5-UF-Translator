@@ -31,8 +31,6 @@ export const getRequestById = (req, res) => {
 // @desc New request
 // @route POST /request/newrequest
 export const newRequest = (req, res) => {
-    //const newRequestData = req.body;
-
     if (!req.body.requestedBy || !req.body.requestBody)
             return res.status(422).json({ message: { messageBody: "Please, fill necessary request info", messageError: true } });
 
@@ -40,11 +38,9 @@ export const newRequest = (req, res) => {
         requestedBy: req.body.requestedBy,
         requestBody: req.body.requestBody
     });
-    console.log(newRequestDoc)
 
     newRequestDoc.save()
         .then(request => {
-            console.log("SAVED: ", request);
             res.status(201).json({ message: { messageBody: "Request succesfully saved to DB", messageError: false } });
         })
         .catch (error => {
