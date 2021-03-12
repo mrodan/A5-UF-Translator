@@ -2,7 +2,6 @@
   "name": "a5-translator",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,9 +12,11 @@
   "author": "Moises Rodan",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/translate": "^6.1.0",
     "body-parser": "^1.19.0",
     "concurrently": "^6.0.0",
     "express": "^4.17.1",
+    "iso-639-1": "^2.1.8",
     "mongoose": "^5.11.15",
     "mongoose-timestamps": "0.0.1",
     "morgan": "^1.10.0",

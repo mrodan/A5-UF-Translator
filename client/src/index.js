@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './bootstrap.min.css';
-import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './bootstrap.min.css';
+import './index.css';
+import LocaleProvider from './context/LocaleContext';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <LocaleProvider>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </LocaleProvider>,
   document.getElementById('root')
 );
 

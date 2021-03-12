@@ -12,14 +12,17 @@ const ListElement = ({ request }) => {
   return (
     <>
       <Link
-        href="/"
+        to={`/request/${request._id}`}
         className="list-group-item list-group-item-action flex-column align-items-start"
       >
         <div className="d-flex w-100 justify-content-between">
           <h5 className="mb-1">{request.requestedBy}</h5>
           <small>{setDateFormat(request.createdAt)}</small>
         </div>
-        <p class="mb-1"><strong>Question:{' '}</strong>{request.requestBody}</p>
+        <div className="d-flex w-100 justify-content-between">
+          <p className="mb-1"><strong>Question:{' '}</strong>{request.requestBody}</p>
+          <small>Responses/Rating</small>
+        </div>
       </Link>
     </>
   );

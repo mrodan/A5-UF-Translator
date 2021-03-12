@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Col, Row } from 'react-bootstrap';
 import ListElement from '../components/ListElement';
+import LanguageSelection from '../components/LanguageSelection';
+import { LocaleContext } from '../context/LocaleContext';
 import './HomeScreenStyle.css';
 
 const HomeScreen = () => {
+  const { locale } = useContext(LocaleContext);
   const [allRequests, setAllRequests] = useState([{}]);
 
   const fetchAllRequests = async () => {
@@ -15,7 +18,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     fetchAllRequests();
-    console.log(allRequests);
   }, []);
   return (
     <>
@@ -26,6 +28,10 @@ const HomeScreen = () => {
           alt="homepage img"
         />
       </Row>
+      <Row>
+        <LanguageSelection />
+      </Row>
+
       <Row className="subtitle-places">
         <h2>List of Places</h2>
       </Row>
@@ -35,35 +41,7 @@ const HomeScreen = () => {
         ))}
       </div>
     </>
-
-    /*
-    <>
-      <Row>
-        <h1>Image</h1>
-      </Row>
-      <Row>
-        <h1>Add Question</h1>
-      </Row>
-      <Row>
-        {allRequests.map((request) => (
-          <Col key={request._id} sm={12} md={6} lg={4} xlg={2}>
-            <RequestCard request={request} />
-          </Col>
-        ))}
-      </Row>
-    </>
-    */
   );
 };
-
-/*
-      <Row>
-        {allRequests.map((request) => (
-          <Col key={request._id} sm={12} md={6} lg={4} xlg={2}>
-            <RequestCard request={request} />
-          </Col>
-        ))}
-      </Row>
-      */
 
 export default HomeScreen;
