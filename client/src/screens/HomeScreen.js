@@ -26,7 +26,13 @@ const HomeScreen = () => {
     setAllRequests(res.data);
   };
 
+  const checkLocale = () => {
+    if (!sessionStorage.hasOwnProperty('locale'))
+      sessionStorage.setItem('locale', 'en')
+  }
+
   useEffect(() => {
+    checkLocale();
     fetchAllRequests();
   }, []);
   return (

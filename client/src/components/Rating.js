@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const Rating = ( { value, color, counter }) => {
     return (
         <div className='rating'>
-            <span>
+            <span style={{margin: '0.1rem'}}>
                 <i style={{color}}
                     className={
                     value >= 1 ? 'fas fa-star' : 
@@ -13,7 +13,7 @@ const Rating = ( { value, color, counter }) => {
                 </i>
             </span>
 
-            <span>
+            <span style={{margin: '0.1rem'}}>
                 <i style={{color}}
                     className={
                     value >= 2 ? 'fas fa-star' : 
@@ -22,7 +22,7 @@ const Rating = ( { value, color, counter }) => {
                 </i>
             </span>
 
-            <span>
+            <span style={{margin: '0.1rem'}}>
                 <i style={{color}}
                     className={
                     value >= 3 ? 'fas fa-star' : 
@@ -31,7 +31,7 @@ const Rating = ( { value, color, counter }) => {
                 </i>
             </span>
 
-            <span>
+            <span style={{margin: '0.1rem'}}>
                 <i style={{color}}
                     className={
                     value >= 4 ? 'fas fa-star' : 
@@ -40,7 +40,7 @@ const Rating = ( { value, color, counter }) => {
                 </i>
             </span>
 
-            <span>
+            <span style={{margin: '0.1rem'}}>
                 <i style={{color}}
                     className={
                     value >= 5 ? 'fas fa-star' : 
@@ -49,7 +49,7 @@ const Rating = ( { value, color, counter }) => {
                 </i>
             </span>
 
-            <span>
+            <span style={{margin: '0.1rem'}}>
                 &nbsp; {counter && counter }
             </span>
             

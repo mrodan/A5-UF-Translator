@@ -3,6 +3,7 @@ import axios from 'axios';
 import translate from '../utils/googleCloudTranslateAPI.js';
 import { Form, Button } from 'react-bootstrap';
 import './RequestScreenStyle.css';
+import Rating from '../components/Rating';
 
 const RequestScreen = ({ match }) => {
   const [translatedRequestBody, setTranslatedRequestBody] = useState('');
@@ -22,6 +23,7 @@ const RequestScreen = ({ match }) => {
     responseBody: '',
   });
 
+  // REQUESTS
   const fetchRequest = async () => {
     const res = await axios.get(`/request/${match.params.id}`);
     setRequest(res.data);
@@ -46,6 +48,7 @@ const RequestScreen = ({ match }) => {
       });
   };
 
+  // HELPERS
   const translateText = async (setTranslatedText, text, locale) => {
     try {
       let [response] = await translate.translate(text, locale);
@@ -57,12 +60,18 @@ const RequestScreen = ({ match }) => {
     }
   };
 
+  const checkLocale = () => {
+    if (!sessionStorage.hasOwnProperty('locale'))
+      sessionStorage.setItem('locale', 'en');
+  };
+
   const setDateFormat = (timestamp) => {
     let date = timestamp + ''; // check*
     date = date.toString().substring(0, 10);
     return date;
   };
 
+  // HANDLERS
   const onChangeHandler = (e) => {
     setNewResponse({ ...newResponse, [e.target.name]: e.target.value });
   };
@@ -74,9 +83,18 @@ const RequestScreen = ({ match }) => {
   };
 
   useEffect(() => {
+    checkLocale();
     fetchRequest();
   }, []);
 
+  /*
+  {translateText(
+    setTranslatedResponseBody,
+    response.responseBody,
+    sessionStorage.getItem('locale')
+  )
+    ? translatedResponseBody
+    : null}*/
   return (
     <>
       <h2>Question</h2>

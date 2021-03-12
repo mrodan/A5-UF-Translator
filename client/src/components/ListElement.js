@@ -13,6 +13,8 @@ const ListElement = ({ request, numRequests }) => {
 
   const translateText = async (text, locale) => {
     try {
+      if (locale === null)
+        locale = 'en'
       let [response] = await translate.translate(text, locale);
       console.log('translated: ', response);
       setTranslatedBody(response);
