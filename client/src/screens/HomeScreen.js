@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Col, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import ListElement from '../components/ListElement';
 import LanguageSelection from '../components/LanguageSelection';
 import { LocaleContext } from '../context/LocaleContext';
@@ -8,12 +8,22 @@ import './HomeScreenStyle.css';
 
 const HomeScreen = () => {
   const { locale } = useContext(LocaleContext);
-  const [allRequests, setAllRequests] = useState([{}]);
+  const [allRequests, setAllRequests] = useState([
+    {
+      requestedBy: '',
+      requestBody: '',
+      responses: [
+        {
+          responseBy: '',
+          responseBody: '',
+        },
+      ],
+    },
+  ]);
 
   const fetchAllRequests = async () => {
     const res = await axios.get('/request/all');
     setAllRequests(res.data);
-    console.log(res.data);
   };
 
   useEffect(() => {
@@ -36,8 +46,12 @@ const HomeScreen = () => {
         <h2>List of Places</h2>
       </Row>
       <div className="list-group">
-        {allRequests.map((request) => (
-          <ListElement request={request} />
+        {allRequests.map((request, index) => (
+          <ListElement
+            key={index}
+            request={request}
+            numRequests={request.responses.length}
+          />
         ))}
       </div>
     </>

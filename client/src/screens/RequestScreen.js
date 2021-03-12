@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import translate from '../utils/googleCloudTranslateAPI.js';
 import { Form, Button } from 'react-bootstrap';
-import './RequestScreenStyle.css'
+import './RequestScreenStyle.css';
 
 const RequestScreen = ({ match }) => {
-  const [newResponse, setNewResponse] = useState({
-    responseBy: '',
-    responseBody: '',
-  });
+  const [translatedRequestBody, setTranslatedRequestBody] = useState('');
+  const [translatedResponseBody, setTranslatedResponseBody] = useState('');
   const [request, setRequest] = useState({
     requestedBy: '',
     requestBody: '',
@@ -18,10 +17,19 @@ const RequestScreen = ({ match }) => {
       },
     ],
   });
+  const [newResponse, setNewResponse] = useState({
+    responseBy: '',
+    responseBody: '',
+  });
 
   const fetchRequest = async () => {
     const res = await axios.get(`/request/${match.params.id}`);
     setRequest(res.data);
+    translateText(
+      setTranslatedRequestBody,
+      res.data.requestBody,
+      sessionStorage.getItem('locale')
+    );
   };
 
   const addNewResponse = async () => {
@@ -38,6 +46,17 @@ const RequestScreen = ({ match }) => {
       });
   };
 
+  const translateText = async (setTranslatedText, text, locale) => {
+    try {
+      let [response] = await translate.translate(text, locale);
+      console.log('translated: ', response);
+      setTranslatedText(response);
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const setDateFormat = (timestamp) => {
     let date = timestamp + ''; // check*
     date = date.toString().substring(0, 10);
@@ -46,7 +65,6 @@ const RequestScreen = ({ match }) => {
 
   const onChangeHandler = (e) => {
     setNewResponse({ ...newResponse, [e.target.name]: e.target.value });
-    console.log(newResponse);
   };
 
   const onSubmitHandler = (e) => {
@@ -71,22 +89,30 @@ const RequestScreen = ({ match }) => {
           </div>
           <p className="mb-1">
             <strong>Question: </strong>
-            {request.requestBody}
+            {translatedRequestBody}
           </p>
         </div>
 
-        {request.responses.length !== 0 ? <h3 className='subtitle-space'>Directions</h3> : null}
+        {request.responses.length !== 0 ? (
+          <h3 className="subtitle-space">Directions</h3>
+        ) : null}
         {request.responses.map((response, index) => (
           <li key={index} className="list-group-item">
             <strong>{response.responseBy}: </strong>
-            {response.responseBody}
+            {translateText(
+              setTranslatedResponseBody,
+              response.responseBody,
+              sessionStorage.getItem('locale')
+            )
+              ? translatedResponseBody
+              : null}
           </li>
         ))}
       </div>
 
-      <div className='subtitle-space'>
+      <div className="subtitle-space">
         <h3>Respond</h3>
-        <Form className='input-group-response' onSubmit={onSubmitHandler}>
+        <Form className="input-group-response" onSubmit={onSubmitHandler}>
           <Form.Group>
             <Form.Label>Who is responding</Form.Label>
             <Form.Control

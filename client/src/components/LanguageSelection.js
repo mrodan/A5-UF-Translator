@@ -2,17 +2,17 @@ import React, { useContext } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { LocaleContext } from '../context/LocaleContext';
 import languages from '../assets/availableLanguages';
+import ISO6391 from 'iso-639-1';
 
-const LanguageSelection = () => {
+const LanguageSelection = (props) => {
   const { setLocale } = useContext(LocaleContext);
 
-  const onClickListener = (lan) => {
-    setLocale(lan);
-    console.log(lan);
+  const onClickListener = (language) => {
+    setLocale(ISO6391.getCode(language));
 
     sessionStorage.removeItem('locale');
-    sessionStorage.setItem('locale', lan);
-    console.log(sessionStorage.getItem('locale'));
+    sessionStorage.setItem('locale', ISO6391.getCode(language));
+    window.location.reload();
   };
 
   return (
@@ -22,12 +22,12 @@ const LanguageSelection = () => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {languages.map((lan) => (
+        {languages.map((language) => (
           <Dropdown.Item
-            key={lan.name}
-            onClick={onClickListener.bind(this, lan.name)}
+            key={language.name}
+            onClick={onClickListener.bind(this, language.name)}
           >
-            {lan.name}
+            {language.name}
           </Dropdown.Item>
         ))}
       </Dropdown.Menu>

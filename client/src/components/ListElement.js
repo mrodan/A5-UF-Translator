@@ -1,14 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import translate from '../utils/googleCloudTranslateAPI.js';
 
-const setDateFormat = (timestamp) => {
-  let date = timestamp + ""; // check*
-  date = date.toString().substring(0,10);
-  return date;
-}
+const ListElement = ({ request, numRequests }) => {
+  const [translatedBody, setTranslatedBody] = useState('');
 
-// check* {request.createdAt.toString().substring(0,10)}
-const ListElement = ({ request }) => {
+  const setDateFormat = (timestamp) => {
+    let date = timestamp + ''; // check*
+    date = date.toString().substring(0, 10);
+    return date;
+  };
+
+  const translateText = async (text, locale) => {
+    try {
+      let [response] = await translate.translate(text, locale);
+      console.log('translated: ', response);
+      setTranslatedBody(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    translateText(request.requestBody, sessionStorage.getItem('locale'));
+  }, [request]);
+
   return (
     <>
       <Link
@@ -20,8 +36,11 @@ const ListElement = ({ request }) => {
           <small>{setDateFormat(request.createdAt)}</small>
         </div>
         <div className="d-flex w-100 justify-content-between">
-          <p className="mb-1"><strong>Question:{' '}</strong>{request.requestBody}</p>
-          <small>Responses/Rating</small>
+          <p className="mb-1">
+            <strong>Question: </strong>
+            {translatedBody}
+          </p>
+          <small>{ numRequests !== 0 ? numRequests : 'No' } replies</small>
         </div>
       </Link>
     </>
