@@ -54,7 +54,7 @@ module.exports = {
     // @route POST /request/newresponse/:id
     newResponse : (req, res) => {
         if (!req.body.responseBody )
-            return res.status(422).json({ message: { messageBody: "Please, fill necessary response body", messageError: true } });
+            res.status(422).json({ message: { messageBody: "Please, fill necessary response body", messageError: true } });
 
         const response = {
             responseBy: req.body.responseBy ? req.body.responseBy : "Unknown",
@@ -71,5 +71,51 @@ module.exports = {
                 console.log(error);
                 res.status(422).json({ message: { messageBody: "Error saving response to DB", messageError: true } });
             })
+    },
+
+    // @desc Update rating
+    // @route POST /request/updaterating/:id
+    updateRating: (req, res) => {
+        if (!req.body.updateRating)
+            res.status(422).json({ message: { messageBody: "Please, rate", messageError: true } });
+        
+        // CHANGE - Only sets last rate
+        const updated = Request.findByIdAndUpdate(req.params.id, { rating: req.body.updateRating })
+            .then(rate => {
+                res.status(200).json({ message: { messageBody: "Rating Updated", messageError: false } });
+            })
+            .catch(error => {
+                console.log(error);
+                res.status(422).json({ message: { messageBody: "Error updating rating in DB", messageError: true } });
+            })
+        
+
+        /*
+        const updated = Request.findById(req.params.id)
+            .then(request => {
+                let temp = (request.ratingCount * request.rating) + req.body.updateRating;
+                request.ratingCount += 1;
+                request.rating = temp / request.ratingCount
+
+                user.markModified('rartingCount');
+                user.markModified('rarting');
+
+                request.save()
+                    .then(req => {
+                        console.log('Rating updated', req);
+                        res.status(200).json({ message: { messageBody: "Rating Updated", messageError: false } });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        res.status(422).json({ message: { messageBody: "Error updating rating in DB", messageError: true } });
+                    })
+            })
+            .catch(error => {
+                console.log(error);
+                res.status(422).json({ message: { messageBody: "Error finding user in DB (rating update)", messageError: true } });
+            })
+            */
+            
+
     }
 }

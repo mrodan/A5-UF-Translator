@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { number } = require('prop-types');
 
 const RequestSchema = new mongoose.Schema(
   {
@@ -10,6 +11,8 @@ const RequestSchema = new mongoose.Schema(
         responseBody: { type: String },
       },
     ],
+    rating: { type: Number, default: 0 },
+    ratingCount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Row } from 'react-bootstrap';
+import { Row, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import ListElement from '../components/ListElement';
 import LanguageSelection from '../components/LanguageSelection';
-import { LocaleContext } from '../context/LocaleContext';
 import './HomeScreenStyle.css';
 
 const HomeScreen = () => {
-  const { locale } = useContext(LocaleContext);
   const [allRequests, setAllRequests] = useState([
     {
       requestedBy: '',
@@ -28,8 +27,8 @@ const HomeScreen = () => {
 
   const checkLocale = () => {
     if (!sessionStorage.hasOwnProperty('locale'))
-      sessionStorage.setItem('locale', 'en')
-  }
+      sessionStorage.setItem('locale', 'en');
+  };
 
   useEffect(() => {
     checkLocale();
@@ -44,12 +43,10 @@ const HomeScreen = () => {
           alt="homepage img"
         />
       </Row>
-      <Row>
-        <LanguageSelection />
-      </Row>
 
-      <Row className="subtitle-places">
-        <h2>List of Places</h2>
+      <Row className="subtitle-places d-flex w-100 justify-content-between">
+        <h2>Requested Directions</h2>
+        <LanguageSelection />
       </Row>
       <div className="list-group">
         {allRequests.map((request, index) => (
@@ -60,6 +57,13 @@ const HomeScreen = () => {
           />
         ))}
       </div>
+
+      <h6 className="subtitle-survey">
+        Please, click to fill the survey before leaving:
+      </h6>
+      <Link to="/#Survey">
+        <Button variant="outline-primary">Survey</Button>{' '}
+      </Link>
     </>
   );
 };

@@ -16,7 +16,7 @@ const ListElement = ({ request, numRequests }) => {
       if (locale === null)
         locale = 'en'
       let [response] = await translate.translate(text, locale);
-      console.log('translated: ', response);
+      //console.log('translated: ', response);
       setTranslatedBody(response);
     } catch (error) {
       console.log(error);

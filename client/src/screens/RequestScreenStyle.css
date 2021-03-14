@@ -6,6 +6,18 @@
     margin-top: -4px;
 }
 
-.rating-spce {
-  margin-right: -5px;
+.rating-space {
+  margin-right: -8px;
+}
+
+.rating-bar {
+  width: 450px;
+}
+
+.rate-toggle-btn {
+  margin-bottom: 15px;
+}
+
+.rate{
+  display: flex;
 }

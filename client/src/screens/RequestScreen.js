@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import translate from '../utils/googleCloudTranslateAPI.js';
 import { Form, Button } from 'react-bootstrap';
-import './RequestScreenStyle.css';
+import LanguageSelection from '../components/LanguageSelection';
+import ResponseElement from '../components/ResponseElement';
 import Rating from '../components/Rating';
+import './RequestScreenStyle.css';
 
 const RequestScreen = ({ match }) => {
   const [translatedRequestBody, setTranslatedRequestBody] = useState('');
-  const [translatedResponseBody, setTranslatedResponseBody] = useState('');
+  const [toggleRate, setToggleRate] = useState(false);
+  const [newRate, setNewRate] = useState(0);
   const [request, setRequest] = useState({
     requestedBy: '',
     requestBody: '',
@@ -17,6 +20,8 @@ const RequestScreen = ({ match }) => {
         responseBody: '',
       },
     ],
+    rating: 0.0,
+    ratingCount: 0,
   });
   const [newResponse, setNewResponse] = useState({
     responseBy: '',
@@ -35,13 +40,31 @@ const RequestScreen = ({ match }) => {
   };
 
   const addNewResponse = async () => {
-    console.log('pre', newResponse);
     await axios
       .post('/request/newresponse/' + match.params.id, newResponse, {
         headers: { 'Content-Type': 'Application/json' },
       })
       .then((res) => {
-        console.log('NewRes -> ', res);
+        //console.log('NewRes -> ', res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateRating = async () => {
+    await axios
+      .post(
+        '/request/updaterating/' + match.params.id,
+        {
+          updateRating: Math.ceil(newRate / 20),
+        },
+        {
+          headers: { 'Content-Type': 'Application/json' },
+        }
+      )
+      .then((res) => {
+        //console.log('NewRate -> ', res);
       })
       .catch((error) => {
         console.log(error);
@@ -51,8 +74,8 @@ const RequestScreen = ({ match }) => {
   // HELPERS
   const translateText = async (setTranslatedText, text, locale) => {
     try {
-      let [response] = await translate.translate(text, locale);
-      console.log('translated: ', response);
+      let [response] = await translate.translate(text.toString(), locale);
+      //console.log('translated: ', response);
       setTranslatedText(response);
       return true;
     } catch (error) {
@@ -66,20 +89,34 @@ const RequestScreen = ({ match }) => {
   };
 
   const setDateFormat = (timestamp) => {
-    let date = timestamp + ''; // check*
+    let date = timestamp + '';
     date = date.toString().substring(0, 10);
     return date;
   };
 
   // HANDLERS
-  const onChangeHandler = (e) => {
+  const onChangeHandlerResponse = (e) => {
     setNewResponse({ ...newResponse, [e.target.name]: e.target.value });
   };
 
-  const onSubmitHandler = (e) => {
+  const onSubmitHandlerResponse = (e) => {
     e.preventDefault();
     addNewResponse();
     fetchRequest();
+  };
+
+  const onClickHandlerToggleRate = () => {
+    setToggleRate(!toggleRate);
+  };
+
+  const onChangeHandlerRate = (e) => {
+    setNewRate(e.target.value);
+    console.log(Math.ceil(e.target.value / 20));
+  };
+
+  const onSubmitHandlerRate = () => {
+    request.rating = Math.ceil(newRate / 20);
+    updateRating();
   };
 
   useEffect(() => {
@@ -87,17 +124,12 @@ const RequestScreen = ({ match }) => {
     fetchRequest();
   }, []);
 
-  /*
-  {translateText(
-    setTranslatedResponseBody,
-    response.responseBody,
-    sessionStorage.getItem('locale')
-  )
-    ? translatedResponseBody
-    : null}*/
   return (
     <>
-      <h2>Question</h2>
+      <div className="d-flex w-100 justify-content-between">
+        <h2>Question</h2>
+        <LanguageSelection />
+      </div>
 
       <div className="list-group">
         <div className="list-group-item list-group-item-action flex-column align-items-start">
@@ -105,49 +137,48 @@ const RequestScreen = ({ match }) => {
             <h5 className="mb-1">{request.requestedBy}</h5>
             <small>{setDateFormat(request.createdAt)}</small>
           </div>
-          <p className="mb-1">
-            <strong>Question: </strong>
-            {translatedRequestBody}
-          </p>
+          <div className="mb-1 d-flex w-100 justify-content-between">
+            <div>
+              <strong>Question: </strong>
+              {translatedRequestBody}
+            </div>
+            <div className="rating-space">
+              <Rating value={request.rating} />
+            </div>
+          </div>
         </div>
 
         {request.responses.length !== 0 ? (
           <h3 className="subtitle-space">Directions</h3>
         ) : null}
         {request.responses.map((response, index) => (
-          <li key={index} className="list-group-item">
-            <strong>{response.responseBy}: </strong>
-            {translateText(
-              setTranslatedResponseBody,
-              response.responseBody,
-              sessionStorage.getItem('locale')
-            )
-              ? translatedResponseBody
-              : null}
-          </li>
+          <ResponseElement key={index} response={response} index={index} />
         ))}
       </div>
 
       <div className="subtitle-space">
-        <h3>Respond</h3>
-        <Form className="input-group-response" onSubmit={onSubmitHandler}>
+        <h3>Reply</h3>
+        <Form
+          className="input-group-response"
+          onSubmit={onSubmitHandlerResponse}
+        >
           <Form.Group>
             <Form.Label>Who is responding</Form.Label>
             <Form.Control
               type="text"
               name="responseBy"
               placeholder="Name"
-              onChange={onChangeHandler}
+              onChange={onChangeHandlerResponse}
             />
           </Form.Group>
           <Form.Group>
-            <Form.Label>Respond</Form.Label>
+            <Form.Label>Direction</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               name="responseBody"
-              placeholder="Direction"
-              onChange={onChangeHandler}
+              placeholder="Guide/Steps"
+              onChange={onChangeHandlerResponse}
             />
           </Form.Group>
 
@@ -155,6 +186,31 @@ const RequestScreen = ({ match }) => {
             Submit
           </Button>
         </Form>
+      </div>
+      <div className="subtitle-space">
+        <Button
+          className="rate-toggle-btn"
+          variant="outline-primary"
+          onClick={onClickHandlerToggleRate}
+        >
+          Rate Translations
+        </Button>{' '}
+        {toggleRate ? (
+          <Form onSubmit={onSubmitHandlerRate} className="rating-bar">
+            <Form.Group controlId="formBasicRangeCustom">
+              <Form.Label>How were the translations?</Form.Label>
+              <Form.Control
+                value={newRate}
+                onChange={onChangeHandlerRate}
+                type="range"
+                custom
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit">
+              Rate
+            </Button>
+          </Form>
+        ) : null}
       </div>
     </>
   );

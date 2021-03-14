@@ -4,14 +4,11 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './bootstrap.min.css';
 import './index.css';
-import LocaleProvider from './context/LocaleContext';
 
 ReactDOM.render(
-  <LocaleProvider>
     <React.StrictMode>
       <App />
-    </React.StrictMode>
-  </LocaleProvider>,
+    </React.StrictMode>,
   document.getElementById('root')
 );
 

@@ -1,15 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { LocaleContext } from '../context/LocaleContext';
 import languages from '../assets/availableLanguages';
 import ISO6391 from 'iso-639-1';
+import './LanguageSelectionStyle.css'
 
 const LanguageSelection = (props) => {
-  const { setLocale } = useContext(LocaleContext);
-
   const onClickListener = (language) => {
-    setLocale(ISO6391.getCode(language));
-
     sessionStorage.removeItem('locale');
     sessionStorage.setItem('locale', ISO6391.getCode(language));
     window.location.reload();
@@ -21,7 +17,7 @@ const LanguageSelection = (props) => {
         Select Language
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
+      <Dropdown.Menu className='dropdown-scroll'>
         {languages.map((language) => (
           <Dropdown.Item
             key={language.name}
