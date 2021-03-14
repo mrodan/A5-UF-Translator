@@ -61,7 +61,7 @@ const HomeScreen = () => {
       <h6 className="subtitle-survey">
         Please, click to fill the survey before leaving:
       </h6>
-      <Link to="/#Survey">
+      <Link to="/survey">
         <Button variant="outline-primary">Survey</Button>{' '}
       </Link>
     </>

@@ -32,4 +32,3 @@ const LanguageSelection = (props) => {
 };
 
 export default LanguageSelection;
-//https://www.npmjs.com/package/iso-639-1
