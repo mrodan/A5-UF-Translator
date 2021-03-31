@@ -1,6 +1,6 @@
 # A5-UF-Translator
 ## CEN 4721 Spring 2021 .
-Simple web application that will allow users to communicate with each other in two languages.
+Simple web application that will allow International Students from the University of Florida to communicate with each other in any language.
 
 ###### First instructions (step 1):
 1) Clone repository
@@ -15,7 +15,6 @@ Simple web application that will allow users to communicate with each other in t
 const config = {
   google_cloud_translate: {
     // YOUR GOOGLE CLOUD API KEY!
-    // Do not copy the {}
   },
 };
 export default config;
